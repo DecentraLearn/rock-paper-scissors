@@ -13,41 +13,64 @@ function computerPlay() {
   return MOVES[Math.floor(Math.random() * 3)]
 }
 
-function playRound(playerSelection, computerSelection) {
+function round(playerSelection, computerSelection) {
   const heroGuess = playerSelection.toLowerCase();
   console.log(`You play: ${heroGuess}, opponent plays: ${computerSelection}`)
   if (heroGuess === computerSelection) {
-    return "It's a TIE! Play again."
+    return "tie"
   } else if (heroGuess === "rock") {
     if (computerSelection === "paper") {
-      return `You Lose! ${computerSelection} beats ${heroGuess}.`
+      return `lose`
     } else {
-      return `You Win! ${heroGuess} beats ${computerSelection}`
+      return `win`
     }
   } else if (heroGuess === "paper") {
     if (computerSelection === "scissors") {
-      return `You Lose! ${computerSelection} beats ${heroGuess}.`
+      return `lose`
     } else {
-      return `You Win! ${heroGuess} beats ${computerSelection}`
+      return `win`
     }
   } else {
     if (computerSelection === "rock") {
-      return `You Lose! ${computerSelection} beats ${heroGuess}.`
+      return `lose`
     } else {
-      return `You Win! ${heroGuess} beats ${computerSelection}`
+      return `win`
     }
   }
 }
 
-//Tests for the playRound function
-console.log(playRound("rock", "rock"));
-console.log(playRound("rock", "paper"));
-console.log(playRound("rock", "scissors"));
+//Tests for the round function
+console.log(round("rock", "rock"));
+console.log(round("rock", "paper"));
+console.log(round("rock", "scissors"));
 
-console.log(playRound("paper", "paper"));
-console.log(playRound("paper", "rock"));
-console.log(playRound("paper", "scissors"));
+console.log(round("paper", "paper"));
+console.log(round("paper", "rock"));
+console.log(round("paper", "scissors"));
 
-console.log(playRound("scissors", "scissors"));
-console.log(playRound("scissors", "paper"));
-console.log(playRound("scissors", "rock"));
+console.log(round("scissors", "scissors"));
+console.log(round("scissors", "paper"));
+console.log(round("scissors", "rock"));
+
+function game() {
+  let playerScore = 0;
+  let computerScore = 0;
+
+  function playRound() {
+    const heroSelection = prompt("Make a selection: rock, paper, or scissors?");
+    const computerSelection = computerPlay();
+    const result = round(heroSelection, computerSelection);
+    if (result === "tie") {
+      console.log("It's a TIE. Play Again.");
+    } else if (result === 'win') {
+      console.log(`You Win! ${heroSelection} beats ${computerSelection}`);
+    } else {
+      console.log(`You Lose! ${computerSelection} beats ${heroSelection}`);
+    }
+  }
+  for (let i = 0; i < 5; i++) {
+    playRound();
+  }
+}
+
+game();
