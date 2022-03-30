@@ -9,10 +9,12 @@
 
 const MOVES = ["rock", "paper", "scissors"]
 
+// Randomly generate a move selection for the computer.
 function computerPlay() {
   return MOVES[Math.floor(Math.random() * 3)]
 }
 
+// Determine who won a round
 function round(playerSelection, computerSelection) {
   const heroGuess = playerSelection.toLowerCase();
   console.log(`You play: ${heroGuess}, opponent plays: ${computerSelection}`)
@@ -39,37 +41,39 @@ function round(playerSelection, computerSelection) {
   }
 }
 
-//Tests for the round function
-console.log(round("rock", "rock"));
-console.log(round("rock", "paper"));
-console.log(round("rock", "scissors"));
-
-console.log(round("paper", "paper"));
-console.log(round("paper", "rock"));
-console.log(round("paper", "scissors"));
-
-console.log(round("scissors", "scissors"));
-console.log(round("scissors", "paper"));
-console.log(round("scissors", "rock"));
-
+// Defines a full game of rock, paper, scissors best of 5
 function game() {
+  // Initialize a scoreboard
   let playerScore = 0;
   let computerScore = 0;
 
+  // Helper function to collect user input, update scoreboard, and console.log results
   function playRound() {
     const heroSelection = prompt("Make a selection: rock, paper, or scissors?");
     const computerSelection = computerPlay();
     const result = round(heroSelection, computerSelection);
     if (result === "tie") {
       console.log("It's a TIE. Play Again.");
+      playRound()
     } else if (result === 'win') {
+      playerScore++;
       console.log(`You Win! ${heroSelection} beats ${computerSelection}`);
     } else {
+      computerScore++;
       console.log(`You Lose! ${computerSelection} beats ${heroSelection}`);
     }
   }
+
+  // Iterate through up to five rounds.
   for (let i = 0; i < 5; i++) {
-    playRound();
+    // If either player has a score of 3, the game is declared over and ends the function
+    if (playerScore >= 3 || computerScore >= 3) {
+      console.log(`Game Over. Your Score: ${playerScore} Computer's Score: ${computerScore}`);
+      return;
+    } else { // If the game is not over, play another round and then console.log the current score
+      playRound();
+      console.log(`Your Score: ${playerScore} Computer's Score: ${computerScore}`);
+    }
   }
 }
 
