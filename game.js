@@ -1,18 +1,8 @@
-// The computer will make a random selection of rock, paper, or scissors
-// The user will input a selection of rock, paper, or scissors
-// Game will determine which selection is the winner of the round
-// Display the round winner in the console
-// Game will track the number of rounds each player wins
-// First player to three is declared the winner
-// Display the winner and reset the game
-
-
 // Randomly generate a move selection for the computer.
 function computerPlay() {
   const moves = ["rock", "paper", "scissors"];
   return moves[Math.floor(Math.random() * 3)]
 }
-
 // Determine who won a round, return the result
 function round(playerSelection, computerSelection) {
   const heroGuess = playerSelection.toLowerCase();
@@ -39,7 +29,17 @@ function round(playerSelection, computerSelection) {
     }
   }
 }
+function startRound(e) {
+  const playerSelection = e.target.id;
+  const computerSelection = computerPlay();
+  console.log(round(playerSelection, computerSelection));
+}
+const buttons = document.querySelectorAll('button');
+buttons.forEach(btn => btn.addEventListener("click", startRound));
 
+
+
+/*
 // Defines a full game of rock, paper, scissors best of 5
 function game() {
   // Initialize a scoreboard
@@ -78,3 +78,4 @@ function game() {
 
 // Play the game
 game();
+*/
