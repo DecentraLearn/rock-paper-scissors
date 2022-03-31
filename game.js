@@ -6,33 +6,65 @@ function computerPlay() {
 // Determine who won a round, return the result
 function round(playerSelection, computerSelection) {
   const heroGuess = playerSelection.toLowerCase();
-  console.log(`You play: ${heroGuess}, opponent plays: ${computerSelection}`)
+
+  function displayResults(hero, computer, result) {
+    const display = document.querySelector("#display");
+    display.textContent = `${result} - You play: ${hero}, opponent plays: ${computer}`
+  }
+  
   if (heroGuess === computerSelection) {
-    return "tie"
+    const result = "tie";
+    displayResults(heroGuess, computerSelection, result);
+    updateScore(result);
   } else if (heroGuess === "rock") {
     if (computerSelection === "paper") {
-      return `lose`
+      const result = `lose`;
+      displayResults(heroGuess, computerSelection, result);
+      updateScore(result);
     } else {
-      return `win`
+      const result = `win`;
+      displayResults(heroGuess, computerSelection, result);
+      updateScore(result);
     }
   } else if (heroGuess === "paper") {
     if (computerSelection === "scissors") {
-      return `lose`
+      const result = `lose`;
+      displayResults(heroGuess, computerSelection, result);
+      updateScore(result);
     } else {
-      return `win`
+      const result = `win`;
+      displayResults(heroGuess, computerSelection, result);
+      updateScore(result);
     }
   } else {
     if (computerSelection === "rock") {
-      return `lose`
+      const result = `lose`;
+      displayResults(heroGuess, computerSelection, result);
+      updateScore(result);
     } else {
-      return `win`
+      const result = `win`;
+      displayResults(heroGuess, computerSelection, result);
+      updateScore(result);
     }
+  }
+}
+function updateScore(outcome) {
+  const playerScoreDisplay = document.querySelector("#player-score");
+  const computerScoreDisplay = document.querySelector("#computer-score");
+  let playerScore = Number(playerScoreDisplay.textContent);
+  let computerScore = Number(computerScoreDisplay.textContent);
+  if (outcome === "tie") {
+    return
+  } else if (outcome === "win") {
+    playerScoreDisplay.textContent = ++playerScore;
+  } else {
+    computerScoreDisplay.textContent = ++computerScore;
   }
 }
 function startRound(e) {
   const playerSelection = e.target.id;
   const computerSelection = computerPlay();
-  console.log(round(playerSelection, computerSelection));
+  round(playerSelection, computerSelection);
 }
 const buttons = document.querySelectorAll('button');
 buttons.forEach(btn => btn.addEventListener("click", startRound));
