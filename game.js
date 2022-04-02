@@ -1,75 +1,103 @@
+let playerScore = 0;
+let computerScore = 0;
+const pointsToWin = 5;
+
+const displayContainer = document.querySelector("#display-container");
+const buttonContainer = document.querySelector("#button-container");
+const playerScoreDisplay = document.querySelector("#player-score");
+const computerScoreDisplay = document.querySelector("#computer-score");
+const display = document.querySelector("#display");
+
 // Randomly generate a move selection for the computer.
 function computerPlay() {
   const moves = ["rock", "paper", "scissors"];
   return moves[Math.floor(Math.random() * 3)]
 }
 
-// Update the scoreboard after every round.
-function updateScore(outcome) {
-  const playerScoreDisplay = document.querySelector("#player-score");
-  const computerScoreDisplay = document.querySelector("#computer-score");
-  let playerScore = Number(playerScoreDisplay.textContent);
-  let computerScore = Number(computerScoreDisplay.textContent);
+// Update the scoreboard and display after every round.
+function updateScore(outcome, playerSelection, computerSelection) {
+  const displayOutcomes = {
+    rock: "Rock",
+    paper: "Paper",
+    scissors: "Scissors"
+  }
   if (outcome === "tie") {
+    display.textContent = `Round TIED. You both picked ${playerSelection}.`;
     return
   } else if (outcome === "win") {
     playerScoreDisplay.textContent = ++playerScore;
+    if (playerScore === pointsToWin) {
+      display.textContent = "Game Over. You WIN!";
+      buttons.forEach(btn => btn.remove());
+      buttonContainer.appendChild(resetButton);
+    } else {
+      display.textContent = `Round WON! ${displayOutcomes[playerSelection]} beats ${computerSelection}.`;
+    }
+    return;
   } else {
     computerScoreDisplay.textContent = ++computerScore;
-  }
-}
-// Create a reset button to be rendered when the game is over
-const resetButton = document.createElement("button");
-resetButton.setAttribute("id", "reset-button");
-resetButton.textContent = "Play Again";
-// Create a reset function for the reset button
-function reset() {
-  document.querySelectorAll(".score").forEach(score => score.textContent = "0");
-  document.querySelector("#reset-button").remove();
-}
-resetButton.addEventListener("click", reset);
-// Determine who won a round, return the result
-function round(playerSelection, computerSelection) {
-  const playerCheckScore = Number(document.querySelector("#player-score").textContent) === 3;
-  const computerCheckScore = Number(document.querySelector("#computer-score").textContent) === 3;
-
-  if (playerCheckScore || computerCheckScore) {
-    document.querySelector("#display").textContent = "Game Over.";
-    document.querySelector("#display-container").appendChild(resetButton);
+    if (computerScore === pointsToWin) {
+      display.textContent = `Game Over. You LOSE!`;
+      buttons.forEach(btn => btn.remove());
+      buttonContainer.appendChild(resetButton);
+    } else {
+      display.textContent = `Round LOST! ${displayOutcomes[playerSelection]} loses to ${computerSelection}.`
+    }
     return;
   }
+}
 
-  const heroGuess = playerSelection.toLowerCase();
-
-  function displayResults(hero, computer, result) {
-    const display = document.querySelector("#display");
-    display.textContent = `${result} - You play: ${hero}, opponent plays: ${computer}`;
-  }  
+// Play a round. Determine who won, handle the result.
+function round(playerSelection, computerSelection) {
   // Object to represent game rules in the format <property> beats <value>
   const winRules = {
     rock: "scissors",
     scissors: "paper",
     paper: "rock"
   }
-  
-  if (heroGuess === computerSelection) {
+  if (playerSelection === computerSelection) {
     const result = "tie";
-    displayResults(heroGuess, computerSelection, result);
-    updateScore(result);
-  } else if (winRules[heroGuess] === computerSelection) {
-    const result = `win`;
-    displayResults(heroGuess, computerSelection, result);
-    updateScore(result);
+    updateScore(result, playerSelection, computerSelection);
+  } else if (winRules[playerSelection] === computerSelection) {
+    const result = "win";
+    updateScore(result, playerSelection, computerSelection);
   } else {
-    const result = `lose`;
-    displayResults(heroGuess, computerSelection, result);
-    updateScore(result);
+    const result = "lose";
+    updateScore(result, playerSelection, computerSelection);
   }
 }
+
+// onClick function for each player selection button
 function startRound(e) {
   const playerSelection = e.target.id;
   const computerSelection = computerPlay();
   round(playerSelection, computerSelection);
 }
-const buttons = document.querySelectorAll('button');
-buttons.forEach(btn => btn.addEventListener("click", startRound));
+const rockButton = document.createElement("button");
+rockButton.textContent = "Rock";
+rockButton.setAttribute("id", "rock");
+const paperButton = document.createElement("button");
+paperButton.textContent = "Paper";
+paperButton.setAttribute("id", "paper");
+const scissorsButton = document.createElement("button");
+scissorsButton.textContent = "Scissors";
+scissorsButton.setAttribute("id", "scissors");
+const buttons = [rockButton, paperButton, scissorsButton]
+buttons.forEach(btn => {
+  btn.addEventListener("click", startRound);
+  buttonContainer.appendChild(btn);
+});
+
+// onClick function for the reset button to restart the game
+function reset() {
+  playerScore = 0;
+  computerScore = 0;
+  playerScoreDisplay.textContent = playerScore;
+  computerScoreDisplay.textContent = computerScore;
+  resetButton.remove();
+  buttons.forEach(btn => buttonContainer.appendChild(btn));
+}
+const resetButton = document.createElement("button");
+resetButton.setAttribute("id", "reset-button");
+resetButton.textContent = "Play Again";
+resetButton.addEventListener("click", reset);
