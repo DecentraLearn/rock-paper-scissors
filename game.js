@@ -3,6 +3,7 @@ function computerPlay() {
   const moves = ["rock", "paper", "scissors"];
   return moves[Math.floor(Math.random() * 3)]
 }
+
 // Update the scoreboard after every round.
 function updateScore(outcome) {
   const playerScoreDisplay = document.querySelector("#player-score");
@@ -21,7 +22,7 @@ function updateScore(outcome) {
 const resetButton = document.createElement("button");
 resetButton.setAttribute("id", "reset-button");
 resetButton.textContent = "Play Again";
-// Create a reset function
+// Create a reset function for the reset button
 function reset() {
   document.querySelectorAll(".score").forEach(score => score.textContent = "0");
   document.querySelector("#reset-button").remove();
@@ -44,40 +45,25 @@ function round(playerSelection, computerSelection) {
     const display = document.querySelector("#display");
     display.textContent = `${result} - You play: ${hero}, opponent plays: ${computer}`;
   }  
+  // Object to represent game rules in the format <property> beats <value>
+  const winRules = {
+    rock: "scissors",
+    scissors: "paper",
+    paper: "rock"
+  }
+  
   if (heroGuess === computerSelection) {
     const result = "tie";
     displayResults(heroGuess, computerSelection, result);
     updateScore(result);
-  } else if (heroGuess === "rock") {
-    if (computerSelection === "paper") {
-      const result = `lose`;
-      displayResults(heroGuess, computerSelection, result);
-      updateScore(result);
-    } else {
-      const result = `win`;
-      displayResults(heroGuess, computerSelection, result);
-      updateScore(result);
-    }
-  } else if (heroGuess === "paper") {
-    if (computerSelection === "scissors") {
-      const result = `lose`;
-      displayResults(heroGuess, computerSelection, result);
-      updateScore(result);
-    } else {
-      const result = `win`;
-      displayResults(heroGuess, computerSelection, result);
-      updateScore(result);
-    }
+  } else if (winRules[heroGuess] === computerSelection) {
+    const result = `win`;
+    displayResults(heroGuess, computerSelection, result);
+    updateScore(result);
   } else {
-    if (computerSelection === "rock") {
-      const result = `lose`;
-      displayResults(heroGuess, computerSelection, result);
-      updateScore(result);
-    } else {
-      const result = `win`;
-      displayResults(heroGuess, computerSelection, result);
-      updateScore(result);
-    }
+    const result = `lose`;
+    displayResults(heroGuess, computerSelection, result);
+    updateScore(result);
   }
 }
 function startRound(e) {
@@ -87,46 +73,3 @@ function startRound(e) {
 }
 const buttons = document.querySelectorAll('button');
 buttons.forEach(btn => btn.addEventListener("click", startRound));
-
-
-
-/*
-// Defines a full game of rock, paper, scissors best of 5
-function game() {
-  // Initialize a scoreboard
-  let playerScore = 0;
-  let computerScore = 0;
-
-  // Helper function to collect user input, update scoreboard, and console.log results
-  function playRound() {
-    const heroSelection = prompt("Make a selection: rock, paper, or scissors?");
-    const computerSelection = computerPlay();
-    const result = round(heroSelection, computerSelection);
-    if (result === "tie") {
-      console.log("It's a TIE. Play Again.");
-      playRound()
-    } else if (result === 'win') {
-      playerScore++;
-      console.log(`You Win! ${heroSelection} beats ${computerSelection}`);
-    } else {
-      computerScore++;
-      console.log(`You Lose! ${computerSelection} beats ${heroSelection}`);
-    }
-  }
-
-  // Iterate through up to five rounds.
-  for (let i = 0; i < 5; i++) {
-    // If either player has a score of 3, the game is declared over and ends the function
-    if (playerScore >= 3 || computerScore >= 3) {
-      console.log(`Game Over. Your Score: ${playerScore} Computer's Score: ${computerScore}`);
-      return;
-    } else { // If the game is not over, play another round and then console.log the current score
-      playRound();
-      console.log(`Your Score: ${playerScore} Computer's Score: ${computerScore}`);
-    }
-  }
-}
-
-// Play the game
-game();
-*/
