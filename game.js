@@ -1,7 +1,9 @@
+// Global variables to track the score
 let playerScore = 0;
 let computerScore = 0;
 const pointsToWin = 5;
 
+// DOM elements
 const displayContainer = document.querySelector("#display-container");
 const buttonContainer = document.querySelector("#button-container");
 const playerScoreDisplay = document.querySelector("#player-score");
@@ -70,17 +72,25 @@ function round(playerSelection, computerSelection) {
 
 // onClick function for each player selection button
 async function startRound(e) {
+  // Trigger button click animation
   this.classList.add('playing');
+  // Disable button functionality while title animation is running
   buttons.forEach(btn => btn.removeEventListener("click", startRound));
+  // Set the displays to round start defaults
   document.querySelector("#player-selection").textContent = "?";
   document.querySelector("#computer-selection").textContent = "?"; 
   document.querySelector("#display").textContent = "...";
+  // Trigger the title animation and wait for it to finish
   await rockPaperScissors(document.querySelector("#title"));
+  // Play a round
   const playerSelection = e.target.id;
   const computerSelection = computerPlay();
-  buttons.forEach(btn => btn.addEventListener("click", startRound));
   round(playerSelection, computerSelection);
+  // Reactivate click functionality of selection buttons
+  buttons.forEach(btn => btn.addEventListener("click", startRound));
 }
+
+// Define the selection buttons to be added and removed from dom
 const rockButton = document.createElement("button");
 rockButton.textContent = "🪨";
 rockButton.setAttribute("id", "rock");
@@ -93,6 +103,7 @@ const scissorsButton = document.createElement("button");
 scissorsButton.textContent = "✂️";
 scissorsButton.setAttribute("id", "scissors");
 scissorsButton.setAttribute("class", "player-choice");
+// Clicking a selection button starts the round function and the click animation
 const buttons = [rockButton, paperButton, scissorsButton]
 buttons.forEach(btn => {
   btn.addEventListener("click", startRound);
@@ -100,8 +111,17 @@ buttons.forEach(btn => {
   buttonContainer.appendChild(btn);
 });
 
+// Define the reset button
+const resetButton = document.createElement("button");
+resetButton.setAttribute("id", "reset-button");
+resetButton.textContent = "Play Again";
+resetButton.addEventListener("click", reset);
+resetButton.addEventListener("transitionend", removeTransition);
 // onClick function for the reset button to restart the game
 function reset() {
+  // Trigger click animation
+  this.classList.add('playing');
+  // Reset all the game elements back to the default
   playerScore = 0;
   computerScore = 0;
   playerScoreDisplay.textContent = playerScore;
@@ -110,21 +130,20 @@ function reset() {
   document.querySelector("#computer-selection").textContent = "?";
   document.querySelector("#title").textContent = "Rock, Paper, Scissors";
   display.textContent = "Make your move, human...";
+  // Remove the reset button and rerender the selection buttons
   resetButton.remove();
   buttons.forEach(btn => {
     buttonContainer.appendChild(btn);
   });
 }
-const resetButton = document.createElement("button");
-resetButton.setAttribute("id", "reset-button");
-resetButton.textContent = "Play Again";
-resetButton.addEventListener("click", reset);
-
+// Function to remove the transition styling
 function removeTransition(e) {
   this.classList.remove("playing");
 }
 
+// Function that changes the title display to run at the beginning of each round
 async function rockPaperScissors(domElement) {
+  // Define a promise that resolves every half second
   function setTextAfterTimeout(text) {
     return new Promise(resolve => {
       setTimeout(() => {
@@ -132,12 +151,14 @@ async function rockPaperScissors(domElement) {
       }, 500)
     });
   }
+  // Call the promise function to cycle through the title animation
   domElement.textContent = "Rock...";
   domElement.textContent = await setTextAfterTimeout("Paper...");
   domElement.textContent = await setTextAfterTimeout("Scissors...");  
   domElement.textContent = await setTextAfterTimeout("Shoot!");
 }
 
+// Function that handles setting the selection display each round
 function setSelectionDisplay(playerSelection, computerSelection) {
   const selectionImage = {
     rock: "🪨",

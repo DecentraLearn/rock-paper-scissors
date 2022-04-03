@@ -10,6 +10,8 @@ body {
   font-family: 'Roboto Mono', monospace;
 }
 .main {
+  margin-top: 50px;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -18,6 +20,9 @@ body {
 #scoreboard {
   display: flex;
   gap: 25px;
+}
+.score {
+  font-size: xx-large;
 }
 .selections-container{
   align-items: center;
@@ -31,23 +36,27 @@ body {
 #button-container, #selections-container {
   display: flex;
   justify-content: space-evenly;
+  min-height: 110px;
 }
 .player-choice, .selection {
-  min-height: 100px;
   padding: 25px;
   font-size: 75px;
   text-align: center;
 }
-.player-choice {
+.player-choice, #reset-button{
   margin: 10px;
   background-color: white;
   transition: all .07s ease-in-out;
 }
-.player-choice:hover {
+.player-choice:hover, #reset-button:hover {
   background-color: rgb(179, 136, 175);
 }
 .playing {
   transform: scale(1.1);
   border-color: #35b7ce;
   box-shadow: 0 0 1rem #cfc9d1;
+}
+#reset-button {
+  padding: 10px;
+  font-size: large;
 }
