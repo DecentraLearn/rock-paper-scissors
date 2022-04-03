@@ -5,14 +5,30 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-  <div id="display-container">
-    <h2 class="score" id="player-score">0</h2>
-    <h2 class="score" id="computer-score">0</h2>
-    <p id="display"></p>
+  <div class="main">
+    <div id="header">
+      <h1 id="title">Rock, Paper, Scissors</h1>
+      <p id="description">first one to five wins... good luck, human...</p>
+    </div>
+    <div id="display-container">
+      <div id="scoreboard">
+        <h2 class="score">Human Score: <span class="score" id="player-score">0</span></h2>
+        <h2 class="score">Computer Score: <span class="score" id="computer-score">0</span></h2>
+      </div>
+      <div id="selections-container">
+        <div class="selection" id="player-selection">?</div>
+        <div class="selection" id="computer-selection">?</div>
+      </div>
+      <p id="display">Make your move, human...</p>
+    </div>
+    <div id="button-container"></div>
   </div>
-  <div id="button-container"></div>
   <script src="./game.js"></script>
 </body>
 </html>

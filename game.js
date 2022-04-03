@@ -49,6 +49,7 @@ function updateScore(outcome, playerSelection, computerSelection) {
 
 // Play a round. Determine who won, handle the result.
 function round(playerSelection, computerSelection) {
+  setSelectionDisplay(playerSelection, computerSelection);
   // Object to represent game rules in the format <property> beats <value>
   const winRules = {
     rock: "scissors",
@@ -68,23 +69,34 @@ function round(playerSelection, computerSelection) {
 }
 
 // onClick function for each player selection button
-function startRound(e) {
+async function startRound(e) {
+  this.classList.add('playing');
+  buttons.forEach(btn => btn.removeEventListener("click", startRound));
+  document.querySelector("#player-selection").textContent = "?";
+  document.querySelector("#computer-selection").textContent = "?"; 
+  document.querySelector("#display").textContent = "...";
+  await rockPaperScissors(document.querySelector("#title"));
   const playerSelection = e.target.id;
   const computerSelection = computerPlay();
+  buttons.forEach(btn => btn.addEventListener("click", startRound));
   round(playerSelection, computerSelection);
 }
 const rockButton = document.createElement("button");
-rockButton.textContent = "Rock";
+rockButton.textContent = "🪨";
 rockButton.setAttribute("id", "rock");
+rockButton.setAttribute("class", "player-choice");
 const paperButton = document.createElement("button");
-paperButton.textContent = "Paper";
+paperButton.textContent = "📜";
 paperButton.setAttribute("id", "paper");
+paperButton.setAttribute("class", "player-choice");
 const scissorsButton = document.createElement("button");
-scissorsButton.textContent = "Scissors";
+scissorsButton.textContent = "✂️";
 scissorsButton.setAttribute("id", "scissors");
+scissorsButton.setAttribute("class", "player-choice");
 const buttons = [rockButton, paperButton, scissorsButton]
 buttons.forEach(btn => {
   btn.addEventListener("click", startRound);
+  btn.addEventListener("transitionend", removeTransition);
   buttonContainer.appendChild(btn);
 });
 
@@ -94,10 +106,44 @@ function reset() {
   computerScore = 0;
   playerScoreDisplay.textContent = playerScore;
   computerScoreDisplay.textContent = computerScore;
+  document.querySelector("#player-selection").textContent = "?";
+  document.querySelector("#computer-selection").textContent = "?";
+  document.querySelector("#title").textContent = "Rock, Paper, Scissors";
+  display.textContent = "Make your move, human...";
   resetButton.remove();
-  buttons.forEach(btn => buttonContainer.appendChild(btn));
+  buttons.forEach(btn => {
+    buttonContainer.appendChild(btn);
+  });
 }
 const resetButton = document.createElement("button");
 resetButton.setAttribute("id", "reset-button");
 resetButton.textContent = "Play Again";
 resetButton.addEventListener("click", reset);
+
+function removeTransition(e) {
+  this.classList.remove("playing");
+}
+
+async function rockPaperScissors(domElement) {
+  function setTextAfterTimeout(text) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(text);
+      }, 500)
+    });
+  }
+  domElement.textContent = "Rock...";
+  domElement.textContent = await setTextAfterTimeout("Paper...");
+  domElement.textContent = await setTextAfterTimeout("Scissors...");  
+  domElement.textContent = await setTextAfterTimeout("Shoot!");
+}
+
+function setSelectionDisplay(playerSelection, computerSelection) {
+  const selectionImage = {
+    rock: "🪨",
+    scissors: "✂️",
+    paper: "📜"
+  }
+  document.querySelector("#player-selection").textContent = selectionImage[playerSelection];
+  document.querySelector("#computer-selection").textContent = selectionImage[computerSelection]; 
+}

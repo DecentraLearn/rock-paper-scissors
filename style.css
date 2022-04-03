@@ -1,0 +1,53 @@
+* {
+  border-radius: 5px;
+}
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Roboto Mono', monospace;
+}
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+#scoreboard {
+  display: flex;
+  gap: 25px;
+}
+.selections-container{
+  align-items: center;
+}
+#display {
+  padding: 10px;
+  background-color: rgb(59, 56, 56);
+  color: azure;
+  margin-bottom: 50px;
+}
+#button-container, #selections-container {
+  display: flex;
+  justify-content: space-evenly;
+}
+.player-choice, .selection {
+  min-height: 100px;
+  padding: 25px;
+  font-size: 75px;
+  text-align: center;
+}
+.player-choice {
+  margin: 10px;
+  background-color: white;
+  transition: all .07s ease-in-out;
+}
+.player-choice:hover {
+  background-color: rgb(179, 136, 175);
+}
+.playing {
+  transform: scale(1.1);
+  border-color: #35b7ce;
+  box-shadow: 0 0 1rem #cfc9d1;
+}
